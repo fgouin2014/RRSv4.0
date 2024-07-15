@@ -3,19 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RRS - HTML5 Game</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-
+    <title>RRS - Séquence de Réponse Rapide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
     <style>
-      @font-face {
-    font-family: 'Led';
-    src: url('ErbosDraco-Nova-NBP.woff2') format('woff2'),
-         url('ErbosDraco-Nova-NBP.woff') format('woff');
-    /* Ajoutez d'autres formats de fichier si nécessaire */
-    font-weight: normal;
-    font-style: normal;
-}
-      
         body {
             background-color: #333;
             display: flex;
@@ -37,8 +28,7 @@
             overflow: hidden;
             white-space: nowrap;
             text-align: center;
-          /*font-family:'Press Start 2P';*/
-          font-family:'Led';
+            font-family: 'led_display_Open_font';
         }
 
         .marquee {
@@ -64,17 +54,35 @@
             text-align: center;
             margin-top: 10px;
             font-size: 24px; /* Taille de police pour le scoreboard */
+            font-family: 'Press Start 2P';
+        }
+
+        /* Style pour le scoreboard */
+        #scoreboard {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #444;
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 12px; /* Taille de police pour le scoreboard */
           font-family:'Press Start 2P'
         }
 
         .stat {
             display: inline-block;
             color: #fff;
+          
         }
 
         .led-score {
             display: flex;
             align-items: center;
+          font-size: 48px;
+          font-family: 'led_display_font';
         }
 
         .led-block {
@@ -169,7 +177,7 @@
 </head>
 <body>
     <div id="marqueeSection">
-        <div class="marquee">RRS - HTML5 Game</div>
+        <div class="marquee">RRS - Séquence de Réponse Rapide</div>
     </div>
 
     <div id="scoreboard">
