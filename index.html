@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RRS - HTML5 Game</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <style>
+      @font-face {
+    font-family: 'Led';
+    src: url('ErbosDraco-Nova-NBP.woff2') format('woff2'),
+         url('ErbosDraco-Nova-NBP.woff') format('woff');
+    /* Ajoutez d'autres formats de fichier si nécessaire */
+    font-weight: normal;
+    font-style: normal;
+}
+      
+        body {
+            background-color: #333;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Digital-7', sans-serif; /* Utilisation d'une police simulant les LED */
+            color: #fff;
+        }
+
+        /* Style pour la marquise */
+        #marqueeSection {
+            background-color: #222;
+            width: 100%;
+            padding: 10px 0;
+            box-sizing: border-box;
+            overflow: hidden;
+            white-space: nowrap;
+            text-align: center;
+          /*font-family:'Press Start 2P';*/
+          font-family:'Led';
+        }
+
+        .marquee {
+            color: #fff;
+            font-size: 20px;
+            animation: marquee 15s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* Style pour le scoreboard */
+        #scoreboard {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #444;
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 24px; /* Taille de police pour le scoreboard */
+          font-family:'Press Start 2P'
+        }
+
+        .stat {
+            display: inline-block;
+            color: #fff;
+        }
+
+        .led-score {
+            display: flex;
+            align-items: center;
+        }
+
+        .led-block {
+            width: 30px; /* Largeur d'un bloc LED */
+            height: 40px; /* Hauteur d'un bloc LED */
+            background-color: #222;
+            margin: 0 2px; /* Marge entre les blocs LED */
+            border-radius: 2px;
+        }
+
+        .led-score span {
+            display: block;
+            text-align: center;
+            margin-top: 6px; /* Espacement du chiffre pour la lisibilité */
+            color: red; /* Couleur des chiffres pour les blocs LED */
+        }
+
+        /* Style pour le game screen */
+        #gameScreenSection {
+            position: relative;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 400px; /* Largeur maximale du game screen */
+        }
+
+        canvas {
+            display: block;
+            background-color: #000;
+            border: 2px solid #fff;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        /* Style pour le controls panel */
+        #controlsPanelSection {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .button {
+            width: 60px;
+            height: 60px;
+            border: none;
+            border-radius: 50%;
+            font-size: 18px;
+            color: #fff;
+            cursor: pointer;
+            margin: 10px; /* Espacement entre les boutons */
+            background-color: #333; /* Couleur de fond pour les boutons */
+        }
+
+        .button:active {
+            opacity: 0.7; /* Opacité réduite lors du clic */
+        }
+
+        .button.red {
+            background-color: #FF5733;
+        }
+
+        .button.blue {
+            background-color: #3498DB;
+        }
+
+        .button.yellow {
+            background-color: #F1C40F;
+        }
+
+        .button.green {
+            background-color: #27AE60;
+        }
+
+        /* Style pour le start button */
+        #startButtonSection {
+            margin-top: 20px;
+        }
+
+        .start-button {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .start-button:active {
+            opacity: 0.7; /* Opacité réduite lors du clic */
+        }
+    </style>
+</head>
+<body>
+    <div id="marqueeSection">
+        <div class="marquee">RRS - HTML5 Game</div>
+    </div>
+
+    <div id="scoreboard">
+        <div class="stat">
+            <span class="stat-title">High-Score:</span>
+            <div class="led-score">
+                <div class="led-block">0</div>
+                <div class="led-block">0</div>
+                <div class="led-block">0</div>
+                <div class="led-block">0</div>
+                <div class="led-block">0</div>
+            </div>
+        </div>
+        <div class="stat">
+            <span class="stat-title">Score actuel:</span>
+            <div class="led-score">
+                <div class="led-block">0</div>
+                <div class="led-block">0</div>
+                <div class="led-block">0</div>
+                <div class="led-block">0</div>
+                <div class="led-block">0</div>
+            </div>
+        </div>
+        <div class="stat">
+            <span class="stat-title">Nombre d'essais:</span>
+            <div class="led-score">
+                <div class="led-block">☠</div>
+                <div class="led-block">☠</div>
+                <div class="led-block">☠</div>
+            </div>
+        </div>
+        <div class="stat">
+            <span class="stat-title">Temps écoulé:</span>
+            <div class="led-score">
+                <div class="led-block">0</div>
+                <div class="led-block">0</div>
+                <div class="led-block">0</div>
+                <div class="led-block">0</div>
+                <div class="led-block">0</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="gameScreenSection">
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+    </div>
+
+    <div id="controlsPanelSection" class="controls-container">
+        <button class="button red" onclick="buttonClicked(this)">A</button>
+        <button class="button blue" onclick="buttonClicked(this)">B</button>
+        <button class="button yellow" onclick="buttonClicked(this)">X</button>
+        <button class="button green" onclick="buttonClicked(this)">Y</button>
+    </div>
+
+    <div id="startButtonSection">
+        <div class="start-button" id="startButton" onclick="startGame()">Start</div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const buttons = ['A', 'B', 'X', 'Y'];
+        let sequence = [];
+        let score = 0;
+        let highScore = 0;
+        let errors = 0;
+        let startTime;
+        let elapsedTime = 0;
+        let interval;
+
+        function drawSequence() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.font = '30px Arial';
+            ctx.fillStyle = '#fff';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            const buttonRadius = 40;
+            const buttonSpacing = 100;
+            const totalWidth = sequence.length * buttonSpacing - (buttonSpacing - buttonRadius * 2);
+            const startX = (canvas.width - totalWidth) / 2 + buttonRadius;
+
+            // Dessine chaque bouton de la séquence sur le canvas
+            sequence.forEach((button, index) => {
+                ctx.beginPath();
+                ctx.fillStyle = getButtonColor(button); // Fonction pour obtenir la couleur du bouton
+                ctx.arc(startX + index * buttonSpacing, canvas.height / 2, buttonRadius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#fff';
+                ctx.fillText(button, startX + index * buttonSpacing, canvas.height / 2);
+
+                // Ajoute le "+" s'il y a plus d'un bouton dans la séquence
+                if (index < sequence.length - 1) {
+                    ctx.fillText("+", startX + index * buttonSpacing + buttonRadius + 10, canvas.height / 2);
+                }
+            });
+        }
+
+        function getButtonColor(button) {
+            switch (button) {
+                case 'A':
+                    return '#FF5733'; // Rouge
+                case 'B':
+                    return '#3498DB'; // Bleu
+                case 'X':
+                    return '#F1C40F'; // Jaune
+                case 'Y':
+                    return '#27AE60'; // Vert
+                default:
+                    return '#333'; // Couleur par défaut
+            }
+        }
+
+        function buttonClicked(button) {
+            const buttonValue = button.textContent;
+            const sequenceValue = sequence.shift();
+
+            if (buttonValue === sequenceValue) {
+                score++;
+                updateScore(score);
+                drawSequence();
+            } else {
+                updateErrors();
+            }
+        }
+
+        function startGame() {
+            score = 0;
+            updateScore(score);
+            errors = 0;
+            updateErrors();
+            sequence = generateSequence(5); // Génère une séquence de 5 boutons
+            drawSequence();
+            startTime = Date.now();
+            clearInterval(interval);
+            interval = setInterval(updateTime, 1000);
+        }
+
+        function generateSequence(length) {
+            const sequence = [];
+            const possibleButtons = ['A', 'B', 'X', 'Y'];
+
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * possibleButtons.length);
+                sequence.push(possibleButtons[randomIndex]);
+            }
+
+            return sequence;
+        }
+
+        function updateScore(newScore) {
+            const scoreDigits = newScore.toString().padStart(5, '0').slice(-5); // Formatage sur 5 caractères
+            const scoreBlocks = document.querySelectorAll('.stat:nth-child(2) .led-block');
+
+            scoreBlocks.forEach((block, index) => {
+                block.textContent = scoreDigits[index];
+            });
+
+            // Met à jour le high score si le nouveau score dépasse l'ancien
+            if (newScore > highScore) {
+                highScore = newScore;
+                updateHighScore(highScore);
+            }
+        }
+
+        function updateHighScore(newHighScore) {
+            const highScoreDigits = newHighScore.toString().padStart(5, '0').slice(-5); // Formatage sur 5 caractères
+            const highScoreBlocks = document.querySelectorAll('.stat:nth-child(1) .led-block');
+
+            highScoreBlocks.forEach((block, index) => {
+                block.textContent = highScoreDigits[index];
+            });
+        }
+
+        function updateErrors() {
+            errors++;
+            const errorDigits = errors.toString().padStart(3, 'x').slice(-3); // Formatage sur 3 caractères
+            const errorBlocks = document.querySelectorAll('.stat:nth-child(3) .led-block');
+
+            errorBlocks.forEach((block, index) => {
+                block.textContent = errorDigits[index];
+            });
+        }
+
+        function updateTime() {
+            elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+            const timeDigits = elapsedTime.toString().padStart(5, '0').slice(-5); // Formatage sur 5 caractères
+            const timeBlocks = document.querySelectorAll('.stat:nth-child(4) .led-block');
+
+            timeBlocks.forEach((block, index) => {
+                block.textContent = timeDigits[index];
+            });
+        }
+    </script>
+</body>
+</html>
